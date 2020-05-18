@@ -1,5 +1,5 @@
 # todo App - a demonstration of low latency stateful data serving and edge functions
-A stateful serverless edge function (running on StackPath)  for serving low latency data pretending to be a To Do App
+A stateful serverless edge function (running on StackPath (https://www.stackpath.com/products/serverless-scripting/)  for serving low latency data from Macrometa's global database (www.macrometa.co) showcased as a "ToDo List App"
 
 Try the app - https://todo.edgezilla.io/  (use the developer tools in chrome to measure network time for end to end latency - from click to edge function (on StackPath) to DB on Macrometa's service and back)
 
