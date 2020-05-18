@@ -1,6 +1,8 @@
 # todo App - a demonstration of low latency stateful data serving and edge functions
 A stateful serverless edge function (running on StackPath)  for serving low latency data pretending to be a To Do App
 
+Try the app - https://todo.edgezilla.io/  (use the developer tools in chrome to measure network time for end to end latency - from click to edge function (on StackPath) to DB on Macrometa's service and back)
+
 This is a simple TO DO app based on a tutorial by cloudflare (CF) on using CF Workers (https://workers.cloudflare.com/) and CF KV Store (https://developers.cloudflare.com/workers/reference/storage)
 
 I found CF KV Store to be extremely slow for something that claims low latency and global data distribution (140 milliseconds for a PUT - come on!!).  Also CF KV Store is eventually consistent and that means global edge apps cant trust state as it might be stale (Eventual Consistency only makes a liveness gaurantee)
