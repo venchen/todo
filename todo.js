@@ -81,12 +81,12 @@ const html = (todos) => `
 
 const defaultData = { todos: [] }
 
-const fabricName = '_system'
+const fabricName = 'LambdaTwo'
 const collectionName = 'todoCollection'
-const federation = 'https://api-qa3-sfo2.eng3.macrometa.io'
+const federation = 'https://api-gdn1.prod.macrometa.io'
 const baseUrl = `${federation}/_fabric/${fabricName}/_api/kv/${collectionName}/value`
 const jwt =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjEuNTg5ODA4MjIzNDc5MzgwOGUrNiwiZXhwIjoxNTg5ODUxNDIzLCJpc3MiOiJhcmFuZ29kYiIsInByZWZlcnJlZF91c2VybmFtZSI6InJvb3QiLCJ0ZW5hbnQiOiJjaGV0YW5fbWFjcm9tZXRhLmlvIn0=.i8Mnnka53kF7R0D01LRJ6MRTPuMVoktiK8sfpwmdqkw='
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjEuNTg5ODkzNzU1NTIxMDUzZSs2LCJleHAiOjE1ODk5MzY5NTUsImlzcyI6ImFyYW5nb2RiIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiTGFtYmRhVXNlciIsInRlbmFudCI6ImNoZXRhbl9tYWNyb21ldGEuaW8ifQ==.4cz9GXRxpFgFoBlOKkQPKISTDwSfLSGsdB2n2h-9ERM='
 
 const headers = new Headers({
   'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const getCache = (key) => {
 }
 
 async function getTodos(request) {
-  const ip = request.headers.get('CF-Connecting-IP')
+  const ip = request.headers.get('x-sp-client-ip')
   const myKey = `data-${ip}`
   let data
   const cacheResponse = await getCache(myKey)
@@ -131,7 +131,7 @@ async function getTodos(request) {
 
 async function updateTodos(request) {
   const body = await request.text()
-  const ip = request.headers.get('CF-Connecting-IP')
+  const ip = request.headers.get('x-sp-client-ip')
   const myKey = `data-${ip}`
   try {
     await setCache(myKey, JSON.parse(body))
