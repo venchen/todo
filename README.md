@@ -9,9 +9,7 @@ Prior art and motivation
 
 This is a simple TO DO app based on a tutorial by cloudflare (CF) on using CF Workers (https://workers.cloudflare.com/) and CF KV Store (https://developers.cloudflare.com/workers/reference/storage)
 
-I found CF KV Store to be extremely slow for something that claims low latency and global data distribution (140 milliseconds for a PUT - come on!!).  Also CF KV Store is eventually consistent and that means global edge apps CANNOT trust state as it might be stale (Eventual Consistency only makes a liveness gaurantee)
 
-So instead Ive re-implemented this to use Macrometa's global database (which provides a KV, DocDB, Graphs, Time series, pub/sub, streams and event processing). Macrometa DB is extremely low latency and offers a better consistency model based on using CRDTs (https://www.macrometa.co/technology). The underlying tech has been heavily scrutinized at places like High Performance Transaction Systems (HPTS 2019).  The Macrometa DB is globally distributed across 100s of locations at CDN scale and delivers stateful data handling to containers, lambdas, serverless functions and more. 
 
 Limitations
 
