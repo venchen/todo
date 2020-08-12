@@ -8,13 +8,13 @@ const html = (todos) => `
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet"></link>
   </head>
 
-  <body class="bg-gray-500">
+  <body class="bg-blue-100">
     <div class="w-full h-full flex content-center justify-center mt-8">
       <div class="bg-white shadow-md rounded px-8 pt-6 py-8 mb-4">
-        <h1 class="block text-grey-800 text-md font-bold mb-2">Macrometa KV - Todos</h1>
+        <h1 class="block text-grey-800 text-md font-bold mb-2">Macrometa KV + CF Workers - Todos</h1>
         <div class="flex">
           <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="name" placeholder="A new todo"></input>
-          <button class="bg-gray-500 hover:bg-gray-800 text-white font-bold ml-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline" id="create" type="submit">Create</button>
+          <button class="bg-blue-500 hover:bg-blue-800 text-white font-bold ml-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline" id="create" type="submit">Create</button>
         </div>
         <div class="mt-4" id="todos"></div>
       </div>
@@ -81,18 +81,20 @@ const html = (todos) => `
 
 const defaultData = { todos: [] }
 
-const fabricName = 'LambdaTwo'
+const fabricName = '_system'
 const collectionName = 'todoCollection'
-const federation = 'https://api-gdn1.prod.macrometa.io'
+const email = 'demo@macrometa.io'
+const password = 'demo'
+const federation = 'https://api-gdn1.macrometa.io'
 const baseUrl = `${federation}/_fabric/${fabricName}/_api/kv/${collectionName}/value`
-const jwt =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjEuNTg5ODkzNzU1NTIxMDUzZSs2LCJleHAiOjE1ODk5MzY5NTUsImlzcyI6ImFyYW5nb2RiIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiTGFtYmRhVXNlciIsInRlbmFudCI6ImNoZXRhbl9tYWNyb21ldGEuaW8ifQ==.4cz9GXRxpFgFoBlOKkQPKISTDwSfLSGsdB2n2h-9ERM='
 
-const headers = new Headers({
-  'Content-Type': 'application/json',
-  Authorization: `bearer ${jwt}`,
-  accept: 'application/json',
-})
+const jwt = JWTTOKEN;
+let headers = new Headers({
+    'Content-Type': 'application/json',
+    Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjEuNTk3MjQxNDQ2NDg4MzA0M2UrNiwiZXhwIjoxNTk3Mjg0NjQ2LCJpc3MiOiJhcmFuZ29kYiIsInByZWZlcnJlZF91c2VybmFtZSI6InJvb3QiLCJ0ZW5hbnQiOiJkZW1vIn0=.-BpLKexvoj6MTR0Mj7NBbnoaIum90yC1FkyPd3Yqcj8=`,
+    accept: 'application/json',
+  });
+
 
 const setCache = (key, data) => {
   const raw = { _key: key, value: data }
@@ -111,7 +113,7 @@ const getCache = (key) => {
 }
 
 async function getTodos(request) {
-  const ip = request.headers.get('x-sp-client-ip')
+  const ip = request.headers.get('CF-Connecting-IP')
   const myKey = `data-${ip}`
   let data
   const cacheResponse = await getCache(myKey)
@@ -131,7 +133,7 @@ async function getTodos(request) {
 
 async function updateTodos(request) {
   const body = await request.text()
-  const ip = request.headers.get('x-sp-client-ip')
+  const ip = request.headers.get('CF-Connecting-IP')
   const myKey = `data-${ip}`
   try {
     await setCache(myKey, JSON.parse(body))
@@ -142,6 +144,7 @@ async function updateTodos(request) {
 }
 
 async function handleRequest(request) {
+
   if (request.method === 'PUT') {
     return updateTodos(request)
   } else {
